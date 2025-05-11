@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RespondeJá | Automação de Atendimento via WhatsApp e Instagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#2E2E2E',
+                        neon: '#39FF14',
+                        purple: '#6A0DAD',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #6A0DAD 0%, #39FF14 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, #39FF14, #6A0DAD);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #6A0DAD, #39FF14);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(106, 13, 173, 0.3);
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .service-icon {
+            background: rgba(57, 255, 20, 0.1);
+            color: #39FF14;
+        }
+        
+        .testimonial {
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial:hover {
+            transform: scale(1.03);
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.hidden {
+            transform: translateX(100%);
+        }
+        /* Estilo do botão do WhatsApp flutuante */
+    #whatsapp-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25D366; /* Cor do WhatsApp */
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 24px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999; /* Para garantir que fique por cima de outros elementos */
+    transition: background-color 0.3s ease;
+}
+
+    #whatsapp-button:hover {
+    background-color: #128C7E; /* Cor mais escura para quando o botão é hover */
+}
+
+    #whatsapp-button i {
+    margin: 0;
+}
+
+    </style>
+</head>
+<body class="font-sans text-dark bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold">
+                    <span class="text-dark">Responde</span><span class="text-purple">Já</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#solucoes" class="text-dark hover:text-purple transition">Soluções</a>
+                <a href="#servicos" class="text-dark hover:text-purple transition">Serviços</a>
+                <a href="#impacto" class="text-dark hover:text-purple transition">Impacto</a>
+                <a href="#sobre" class="text-dark hover:text-purple transition">Sobre</a>
+            </div>
+            
+            <div>
+                <a href="#contato" class="hidden md:inline-block bg-purple text-white px-5 py-2 rounded-full hover:bg-opacity-90 transition">Fale Conosco</a>
+                <button id="mobile-menu-button" class="md:hidden text-dark">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu hidden md:hidden bg-white absolute w-full">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#solucoes" class="text-dark hover:text-purple transition py-2">Soluções</a>
+                <a href="#servicos" class="text-dark hover:text-purple transition py-2">Serviços</a>
+                <a href="#impacto" class="text-dark hover:text-purple transition py-2">Impacto</a>
+                <a href="#sobre" class="text-dark hover:text-purple transition py-2">Sobre</a>
+                <a href="#contato" class="bg-purple text-white px-5 py-2 rounded-full hover:bg-opacity-90 transition text-center">Fale Conosco</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-28 pb-20 px-4 md:px-0">
+        <div class="container mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                    Automatize seu atendimento e <span class="text-gradient">venda mais</span> com menos esforço
+                </h1>
+                <p class="text-lg mb-8 text-gray-700">
+                    Soluções inteligentes de automação para WhatsApp e Instagram que transformam seu atendimento e impulsionam suas vendas.
+                </p>
+                <a href="https://wa.me/5548988624462" target="_blank" class="btn-primary text-white font-medium px-8 py-4 rounded-full inline-flex items-center">
+                    <span>Quero automatizar meu atendimento</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative">
+                    <div class="w-64 h-64 md:w-80 md:h-80 bg-purple rounded-full opacity-10 absolute top-0 right-0 floating"></div>
+                    <svg class="w-full max-w-md floating" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#6A0DAD" d="M416.7,221.5c-12.6-12.1-29.2-18.8-46.7-18.8h-91.5c-5.5,0-10,4.5-10,10s4.5,10,10,10H370c12.1,0,23.6,4.7,32.2,13c8.6,8.3,13.3,19.4,13.3,31.3c0,24.4-19.9,44.3-44.3,44.3h-91.5c-5.5,0-10,4.5-10,10s4.5,10,10,10H370c35.4,0,64.3-28.8,64.3-64.3C434.3,250.1,428.2,232.5,416.7,221.5z"/>
+                        <path fill="#39FF14" d="M224.8,221.5c-12.6-12.1-29.2-18.8-46.7-18.8H86.7c-5.5,0-10,4.5-10,10s4.5,10,10,10h91.5c12.1,0,23.6,4.7,32.2,13c8.6,8.3,13.3,19.4,13.3,31.3c0,24.4-19.9,44.3-44.3,44.3H86.7c-5.5,0-10,4.5-10,10s4.5,10,10,10h91.5c35.4,0,64.3-28.8,64.3-64.3C242.4,250.1,236.3,232.5,224.8,221.5z"/>
+                        <path fill="#2E2E2E" d="M321.3,150H178.7c-5.5,0-10,4.5-10,10s4.5,10,10,10h142.6c5.5,0,10-4.5,10-10S326.8,150,321.3,150z"/>
+                        <path fill="#2E2E2E" d="M321.3,330H178.7c-5.5,0-10,4.5-10,10s4.5,10,10,10h142.6c5.5,0,10-4.5,10-10S326.8,330,321.3,330z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pain Points & Solutions Section -->
+    <section id="solucoes" class="py-16 bg-brand-gray">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Problemas que resolvemos</h2>
+                <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                    Transforme os desafios do seu atendimento em oportunidades de crescimento
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Pain Point 1 -->
+                <div class="feature-card bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Perda de clientes</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">Demora para responder mensagens faz com que potenciais clientes desistam da compra.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 font-medium">Respostas automáticas 24/7</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pain Point 2 -->
+                <div class="feature-card bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Sobrecarga de trabalho</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">Responder as mesmas perguntas repetidamente consome tempo valioso do seu dia.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 font-medium">FAQ automatizado inteligente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pain Point 3 -->
+                <div class="feature-card bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Agendamentos confusos</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">Horários duplicados, cancelamentos não registrados e confusão na agenda.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 font-medium">Sistema de agendamento integrado</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pain Point 4 -->
+                <div class="feature-card bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Leads não qualificados</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">Tempo perdido com pessoas que não têm real interesse no seu produto ou serviço.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 font-medium">Qualificação automática de leads</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pain Point 5 -->
+                <div class="feature-card bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Abandono de carrinho</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">Clientes iniciam compras mas desistem no meio do processo por falta de acompanhamento.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 font-medium">Recuperação automática de vendas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pain Point 6 -->
+                <div class="feature-card bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold">Falta de acompanhamento</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">Clientes que compram uma vez e nunca mais retornam por falta de relacionamento.</p>
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 font-medium">Sequências de fidelização</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section id="servicos" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossos Serviços</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Os exemplos de serviços apresentados são ilustrativos. Os valores e entregas variam de acordo com o seu objetivo e modelo de negócio. Tudo é personalizado após uma consultoria inicial.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Serviço 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card">
+                    <div class="w-16 h-16 rounded-full service-icon flex items-center justify-center mb-6">
+                        <i class="fas fa-headset text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Pré-atendimento</h3>
+                    <p class="text-gray-600 mb-6">Receba e qualifique seus clientes automaticamente, 24 horas por dia, 7 dias por semana.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Mensagens de boas-vindas personalizadas</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Qualificação automática de leads</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Respostas para perguntas frequentes</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Serviço 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card">
+                    <div class="w-16 h-16 rounded-full service-icon flex items-center justify-center mb-6">
+                        <i class="fas fa-calendar-check text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Agendamento Completo</h3>
+                    <p class="text-gray-600 mb-6">Permita que seus clientes agendem horários sozinhos, reduza faltas e aumente a satisfação com lembretes automáticos para seus clientes.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Integração com seu calendário</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Confirmação automática + Lembrete</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Reagendamento simplificado</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Serviço 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card">
+                    <div class="w-16 h-16 rounded-full service-icon flex items-center justify-center mb-6">
+                        <i class="fas fa-bell text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Pós-Vendas</h3>
+                    <p class="text-gray-600 mb-6">Com automações de pós-venda, sua marca continua presente mesmo depois que a compra acontece. Existem diferentes estratégias que podem ser aplicadas nesse módulo, de acordo com seu negócio. É relacionamento no automático que gera novas vendas sem esforço.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Upsell ou recomendação de novos produtos</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Agradecimento ou Solicitação de depoimento</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Reativação de clientes</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Serviço 4 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card">
+                    <div class="w-16 h-16 rounded-full service-icon flex items-center justify-center mb-6">
+                        <i class="fas fa-user-plus text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Captação de Leads</h3>
+                    <p class="text-gray-600 mb-6">Capture e qualifique leads automaticamente, criando uma base de clientes potenciais.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Formulários interativos</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Segmentação automática</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Nutrição de leads</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Serviço 5 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card">
+                    <div class="w-16 h-16 rounded-full service-icon flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Pesquisa de Satisfação</h3>
+                    <p class="text-gray-600 mb-6">Colete feedback valioso dos seus clientes para melhorar continuamente seu negócio.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Pesquisas personalizadas</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Análise de resultados</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Alertas de insatisfação</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Serviço 6 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card">
+                    <div class="w-16 h-16 rounded-full service-icon flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Automação Personalizada</h3>
+                    <p class="text-gray-600 mb-6">Soluções sob medida para as necessidades específicas do seu negócio.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Consultoria especializada</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Desenvolvimento personalizado</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-neon mr-2"></i>
+                            <span>Suporte contínuo</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impacto -->
+    <section id="impacto" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">O Impacto da Automação</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">O Que as Estatísticas Mostram Sobre o Sucesso da Automação</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Depoimento 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 testimonial">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-purple text-white flex items-center justify-center mr-4">
+                            <span class="font-bold">SB</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Salões de Beleza</h4>
+                            <p class="text-sm text-gray-500">Aumento de Vendas-Redução de Faltas</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">Empresas do setor de beleza que implementaram automação de agendamentos e lembretes têm reduzido faltas em até 80%, com aumento significativo na eficiência do atendimento.</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Depoimento 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 testimonial">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-purple text-white flex items-center justify-center mr-4">
+                            <span class="font-bold">CEM</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Clínicas Estéticas e Médicas</h4>
+                            <p class="text-sm text-gray-500">Automação de Agendamentos e Confirmação de Consultas</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">Além da redução de faltas em até 80% também tem um aumento de 20% na retenção de pacientes com campanhas automatizadas de pós-consulta com automação de pós-vendas</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Depoimento 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-8 testimonial">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-purple text-white flex items-center justify-center mr-4">
+                            <span class="font-bold">NL</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Négocios Locais</h4>
+                            <p class="text-sm text-gray-500">Fármacia, Restaurantes, PetShop etc...</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">Um relatório da Harvard Business Review aponta que 81% dos clientes tentam resolver problemas por conta própria antes de entrar em contato com um representante. A automação facilita o autoatendimento, disponibilizando recursos e informações de forma acessível. 
+</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 bg-white rounded-xl shadow-lg p-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div>
+                        <div class="text-4xl font-bold text-purple mb-2">+30%</div>
+                        <p class="text-gray-600">Aumento na taxa de conversão</p>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-purple mb-2">80%</div>
+                        <p class="text-gray-600">Redução nas faltas</p>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-purple mb-2">+85%</div>
+                        <p class="text-gray-600">Satisfação dos clientes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre a Fundadora -->
+    <section id="sobre" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/3 mb-10 md:mb-0">
+                    <div class="relative">
+                        <div class="w-64 h-64 rounded-full bg-purple opacity-10 absolute -top-4 -left-4"></div>
+                        <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-neon relative">
+                            <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-neon relative">
+                                 <img src="foto.png" alt="Rafaela Victor" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-2/3 md:pl-16">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Sobre a Fundadora</h2>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-purple">Rafaela Victor — Fundadora e CEO</h3>
+                        <a href="https://www.instagram.com/rafa.automatiza" target="_blank" class="text-gray-500 hover:text-purple transition flex items-center mt-1">
+                            <i class="fab fa-instagram mr-2"></i>
+                            @rafa.automatiza
+                        </a>
+                    </div>
+                    <div class="space-y-4 text-gray-600">
+                        <p>A RespondeJá nasceu da minha própria dor como empreendedora: conciliar vendas, atendimento e rotina sem perder a cabeça.</p>
+                        <p>Depois de anos liderando o setor comercial de uma fábrica 100% online, entendi como o atendimento é o coração do negócio — e como ele pode travar o crescimento se for 100% manual.</p>
+                        <p>Decidi então criar uma solução prática, personalizada e acessível que colocasse a tecnologia para trabalhar pelo pequeno empreendedor — mesmo que ele não entenda nada de automação.</p>
+                        <p>Hoje, ajudo outras empreendedoras e donos de negócios a escalar seu atendimento, vender mais e recuperar tempo pra focar no que realmente importa.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-20">
+                <div class="bg-gray-50 rounded-xl p-8 md:p-12">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Prazer, somos a RespondeJá</h3>
+                    <div class="prose max-w-3xl mx-auto text-gray-600 space-y-4">
+                        <p>Nós nascemos da pressa.</p>
+                        <p>Da correria de quem tem um negócio pra tocar, uma vida pra cuidar, e ainda precisa responder mil mensagens por dia.</p>
+                        <p>A gente sabe como é cansativo fazer tudo sozinho — atender, vender, organizar, cobrar, divulgar...</p>
+                        <p>Mas a gente acredita que dá pra fazer diferente.</p>
+                        <p>Acreditamos que automação não é robô gelado nem conversa engessada. Automação é liberdade. É tempo de volta. É foco no que importa.</p>
+                        <p>Por isso, criamos soluções que simplificam. Fluxos inteligentes, respostas rápidas, atendimento que não dorme. Sem complicação, sem precisar entender de código, sem enrolação.</p>
+                        <p>Nosso papel é transformar a tecnologia em aliada. Pra que o pequeno e médio empreendedor possa respirar. Pra que o negócio cresça com menos esforço e mais inteligência. Pra que a experiência do cliente seja tão boa quanto o seu serviço.</p>
+                        <p>A RespondeJá existe pra mostrar que vender e atender pode — e deve — ser mais leve.</p>
+                        <p>Porque tempo é precioso. Cliente bem atendido, mais ainda. E a gente tá aqui pra garantir os dois.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section id="contato" class="py-20 bg-dark text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Vamos automatizar seu atendimento hoje?</h2>
+                <p class="text-xl mb-10 text-gray-300">Não perca mais tempo e oportunidades. Dê o primeiro passo para transformar seu negócio.</p>
+                
+                <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                    <a href="https://wa.me/5548988624462" target="_blank" class="btn-primary text-white font-medium px-8 py-4 rounded-full inline-flex items-center justify-center">
+                        <i class="fab fa-whatsapp text-xl mr-3"></i>
+                        <span>Falar com um especialista</span>
+                    </a>
+                    <a href="https://www.instagram.com/respondejaautomacao" target="_blank" class="bg-white text-dark font-medium px-8 py-4 rounded-full inline-flex items-center justify-center hover:bg-gray-100 transition">
+                        <i class="fab fa-instagram text-xl mr-3"></i>
+                        <span>Seguir no Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark py-10 text-gray-400">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-2xl font-bold mb-2">
+                        <span class="text-white">Responde</span><span class="text-purple">Já</span>
+                    </div>
+                    <p>Automação de atendimento e vendas</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row md:space-x-12 space-y-6 md:space-y-0 mb-6 md:mb-0">
+                    <div>
+                        <h4 class="text-white font-bold mb-3">Contato</h4>
+                        <ul class="space-y-2">
+                            <li>
+                                <a href="https://wa.me/5548988624462" target="_blank" class="hover:text-neon transition flex items-center">
+                                    <i class="fab fa-whatsapp mr-2"></i>
+                                    WhatsApp
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:respondeja.startup@gmail.com" class="hover:text-neon transition flex items-center">
+                                    <i class="far fa-envelope mr-2"></i>
+                                    respondeja.startup@gmail.com
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/respondejaautomacao" target="_blank" class="hover:text-neon transition flex items-center">
+                                    <i class="fab fa-instagram mr-2"></i>
+                                    @respondejaautomacao
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-white font-bold mb-3">Navegação</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#solucoes" class="hover:text-neon transition">Soluções</a></li>
+                            <li><a href="#servicos" class="hover:text-neon transition">Serviços</a></li>
+                            <li><a href="#impacto" class="hover:text-neon transition">Impacto</a></li>
+                            <li><a href="#sobre" class="hover:text-neon transition">Sobre</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="https://www.instagram.com/respondejaautomacao" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-purple transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/554898624462" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-neon hover:text-dark transition">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2025 RespondeJá. Todos os direitos reservados.</p>
+                <P>CNPJ:60.445.255.0001/90</P>
+                <p>Içara-SC, Brasil</p>
+            </div>
+        </div>
+    </footer>
+    <!-- WhatsApp Flutuante -->
+    <a href="https://wa.me/5548988624462" target="_blank" id="whatsapp-button" class="whatsapp-button">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93dc249623e85bd2',t:'MTc0NjkwODQ4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
